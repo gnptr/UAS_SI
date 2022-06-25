@@ -1,41 +1,98 @@
-# Contributing
+## Contributing to Flot ##
 
-## Support requests
+We welcome all contributions, but following these guidelines results in less
+work for us, and a faster and better response.
 
-The issue tracker is not the place for support requests.  If you get stuck with bootstrap-datepicker, it's very likely that the fine folks at [StackOverflow](http://stackoverflow.com/) will be able to help you; simply describe the problem you're having and provide them a link to the repo (so they know what code you're using).  Another option is to post to the [bootstrap-datepicker google group](https://groups.google.com/group/bootstrap-datepicker).
+### Issues ###
 
-## Issues
+Issues are not a way to ask general questions about Flot. If you see unexpected
+behavior but are not 100% certain that it is a bug, please try posting to the
+[forum](http://groups.google.com/group/flot-graphs) first, and confirm that
+what you see is really a Flot problem before creating a new issue for it.  When
+reporting a bug, please include a working demonstration of the problem, if
+possible, or at least a clear description of the options you're using and the
+environment (browser and version, jQuery version, other libraries) that you're
+running under.
 
-If you've found a bug in bootstrap-datepicker, we want to know about it!  However, please keep the following in mind:
+If you have suggestions for new features, or changes to existing ones, we'd
+love to hear them! Please submit each suggestion as a separate new issue.
 
-* This is not the bootstrap-datepicker from [eyecon.ro](http://www.eyecon.ro/bootstrap-datepicker/).  Stefan provided the initial code for bootstrap-datepicker, but this repo is divergent from his codebase.  Please make sure you're using either the latest tagged version or the latest master from https://github.com/uxsolutions/bootstrap-datepicker/.
-* A working example of the bug you've found is *much* easier to work with than a  description alone.  If possible, please provide a link to a demonstration of the bug, perhaps using http://jsfiddle.net/ .
-  * CDN-backed assets can be found at http://bsdp-assets.blackcherry.us/ .  These should be used *only* for building test cases, as they may be removed or changed at any time.
-* Finally, it's possible someone else has already reported the same bug you have.  Please search the issue tracker for similar issues before posting your own.  Thanks!
+If you would like to work on an existing issue, please make sure it is not
+already assigned to someone else. If an issue is assigned to someone, that
+person has already started working on it. So, pick unassigned issues to prevent
+duplicated effort.
 
-## Pull Requests
+### Pull Requests ###
 
-Patches welcome!
+To make merging as easy as possible, please keep these rules in mind:
 
-For all cases, you should have your own fork of the repo.
+ 1. Submit new features or architectural changes to the *&lt;version&gt;-work*
+    branch for the next major release.  Submit bug fixes to the master branch.
 
-To submit a pull request for a **new feature**:
+ 2. Divide larger changes into a series of small, logical commits with
+    descriptive messages.
 
-1. Run the tests.  Every pull request for a new feature should have an accompanying unit test and docs changes.  See the `README.md` in the `tests/` and `docs/` directories for details.
-2. Create a new branch off of the `master` branch for your feature.  This is particularly helpful when you want to submit multiple pull requests.
-3. Add a test (or multiple tests) for your feature.  Again, see `tests/README.md`.
-4. Add your new feature, making the test pass.
-5. Push to your fork and submit the pull request!
+ 3. Rebase, if necessary, before submitting your pull request, to reduce the
+    work we need to do to merge it.
 
-To submit a **bug fix**:
+ 4. Format your code according to the style guidelines below.
 
-1. Create a new branch off of the `master` branch.
-2. Add a test that demonstrates the bug.
-3. Make the test pass.
-4. Push to your fork and submit the pull request!
+### Flot Style Guidelines ###
 
-To submit a **documentation fix**:
+Flot follows the [jQuery Core Style Guidelines](http://docs.jquery.com/JQuery_Core_Style_Guidelines),
+with the following updates and exceptions:
 
-1. Create a new branch off of the `master` branch.
-2. Add your documentation fixes (no tests required).
-3. Push to your fork and submit the pull request!
+#### Spacing ####
+
+Use four-space indents, no tabs.  Do not add horizontal space around parameter
+lists, loop definitions, or array/object indices. For example:
+
+```js
+    for ( var i = 0; i < data.length; i++ ) {  // This block is wrong!
+        if ( data[ i ] > 1 ) {
+            data[ i ] = 2;
+        }
+    }
+
+    for (var i = 0; i < data.length; i++) {  // This block is correct!
+        if (data[i] > 1) {
+            data[i] = 2;
+        }
+    }
+```
+
+#### Comments ####
+
+Use [jsDoc](http://usejsdoc.org) comments for all file and function headers.
+Use // for all inline and block comments, regardless of length.
+
+All // comment blocks should have an empty line above *and* below them. For
+example:
+
+```js
+    var a = 5;
+
+    // We're going to loop here
+    // TODO: Make this loop faster, better, stronger!
+
+    for (var x = 0; x < 10; x++) {}
+```
+
+#### Wrapping ####
+
+Block comments should be wrapped at 80 characters.
+
+Code should attempt to wrap at 80 characters, but may run longer if wrapping
+would hurt readability more than having to scroll horizontally.  This is a
+judgement call made on a situational basis.
+
+Statements containing complex logic should not be wrapped arbitrarily if they
+do not exceed 80 characters. For example:
+
+```js
+    if (a == 1 &&    // This block is wrong!
+        b == 2 &&
+        c == 3) {}
+
+    if (a == 1 && b == 2 && c == 3) {}  // This block is correct!
+```

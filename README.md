@@ -1,140 +1,110 @@
-# FastClick #
+# Flot [![Build status](https://travis-ci.org/flot/flot.png)](https://travis-ci.org/flot/flot)
 
-FastClick is a simple, easy-to-use library for eliminating the 300ms delay between a physical tap and the firing of a `click` event on mobile browsers. The aim is to make your application feel less laggy and more responsive while avoiding any interference with your current logic.
+## About ##
 
-FastClick is developed by [FT Labs](http://labs.ft.com/), part of the Financial Times.
+Flot is a Javascript plotting library for jQuery.  
+Read more at the website: <http://www.flotcharts.org/>
 
-[Explication en français](http://maxime.sh/2013/02/supprimer-le-lag-des-clics-sur-mobile-avec-fastclick/).
+Take a look at the the examples in examples/index.html; they should give a good
+impression of what Flot can do, and the source code of the examples is probably
+the fastest way to learn how to use Flot.
 
-[日本語で説明](https://developer.mozilla.org/ja/docs/Mozilla/Firefox_OS/Apps/Tips_and_techniques#Make_events_immediate)。
 
-## Why does the delay exist? ##
+## Installation ##
 
-According to [Google](https://developers.google.com/mobile/articles/fast_buttons):
+Just include the Javascript file after you've included jQuery.
 
-> ...mobile browsers will wait approximately 300ms from the time that you tap the button to fire the click event. The reason for this is that the browser is waiting to see if you are actually performing a double tap.
+Generally, all browsers that support the HTML5 canvas tag are
+supported.
 
-## Compatibility ##
-
-The library has been deployed as part of the [FT Web App](http://app.ft.com/) and is tried and tested on the following mobile browsers:
-
-* Mobile Safari on iOS 3 and upwards
-* Chrome on iOS 5 and upwards
-* Chrome on Android (ICS)
-* Opera Mobile 11.5 and upwards
-* Android Browser since Android 2
-* PlayBook OS 1 and upwards
-
-## When it isn't needed ##
-
-FastClick doesn't attach any listeners on desktop browsers.
-
-Chrome 32+ on Android with `width=device-width` in the [viewport meta tag](https://developer.mozilla.org/en-US/docs/Mobile/Viewport_meta_tag) doesn't have a 300ms delay, therefore listeners aren't attached.
+For support for Internet Explorer < 9, you can use [Excanvas]
+[excanvas], a canvas emulator; this is used in the examples bundled
+with Flot. You just include the excanvas script like this:
 
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
 ```
 
-Same goes for Chrome on Android (all versions) with `user-scalable=no` in the viewport meta tag. But be aware that `user-scalable=no` also disables pinch zooming, which may be an accessibility concern.
+If it's not working on your development IE 6.0, check that it has
+support for VML which Excanvas is relying on. It appears that some
+stripped down versions used for test environments on virtual machines
+lack the VML support.
 
-For IE11+, you can use `touch-action: manipulation;` to disable double-tap-to-zoom on certain elements (like links and buttons).  For IE10 use `-ms-touch-action: manipulation`.
+You can also try using [Flashcanvas][flashcanvas], which uses Flash to
+do the emulation. Although Flash can be a bit slower to load than VML,
+if you've got a lot of points, the Flash version can be much faster
+overall. Flot contains some wrapper code for activating Excanvas which
+Flashcanvas is compatible with.
 
-## Usage ##
+You need at least jQuery 1.2.6, but try at least 1.3.2 for interactive
+charts because of performance improvements in event handling.
 
-Include fastclick.js in your JavaScript bundle or add it to your HTML page like this:
+
+## Basic usage ##
+
+Create a placeholder div to put the graph in:
 
 ```html
-<script type='application/javascript' src='/path/to/fastclick.js'></script>
+<div id="placeholder"></div>
 ```
 
-The script must be loaded prior to instantiating FastClick on any element of the page.
-
-To instantiate FastClick on the `body`, which is the recommended method of use:
-
-```js
-if ('addEventListener' in document) {
-	document.addEventListener('DOMContentLoaded', function() {
-		FastClick.attach(document.body);
-	}, false);
-}
-```
-
-Or, if you're using jQuery:
-
-```js
-$(function() {
-	FastClick.attach(document.body);
-});
-```
-
-If you're using Browserify or another CommonJS-style module system, the `FastClick.attach` function will be returned when you call `require('fastclick')`. As a result, the easiest way to use FastClick with these loaders is as follows:
-
-```js
-var attachFastClick = require('fastclick');
-attachFastClick(document.body);
-```
-
-### Minified ###
-
-Run `make` to build a minified version of FastClick using the Closure Compiler REST API. The minified file is saved to `build/fastclick.min.js` or you can [download a pre-minified version](http://build.origami.ft.com/bundles/js?modules=fastclick).
-
-Note: the pre-minified version is built using [our build service](http://origami.ft.com/docs/developer-guide/build-service/) which exposes the `FastClick` object through `Origami.fastclick` and will have the Browserify/CommonJS API (see above).
-
-```js
-var attachFastClick = Origami.fastclick;
-attachFastClick(document.body);
-```
-
-### AMD ###
-
-FastClick has AMD (Asynchronous Module Definition) support. This allows it to be lazy-loaded with an AMD loader, such as [RequireJS](http://requirejs.org/). Note that when using the AMD style require, the full `FastClick` object will be returned, _not_ `FastClick.attach`
-
-```js
-var FastClick = require('fastclick');
-FastClick.attach(document.body, options);
-```
-
-### Package managers ###
-
-You can install FastClick using [Component](https://github.com/component/component), [npm](https://npmjs.org/package/fastclick) or [Bower](http://bower.io/).
-
-For Ruby, there's a third-party gem called [fastclick-rails](http://rubygems.org/gems/fastclick-rails). For .NET there's a [NuGet package](http://nuget.org/packages/FastClick).
-
-## Advanced ##
-
-### Ignore certain elements with `needsclick` ###
-
-Sometimes you need FastClick to ignore certain elements. You can do this easily by adding the `needsclick` class.
-```html
-<a class="needsclick">Ignored by FastClick</a>
-```
-
-#### Use case 1: non-synthetic click required ####
-
-Internally, FastClick uses `document.createEvent` to fire a synthetic `click` event as soon as `touchend` is fired by the browser. It then suppresses the additional `click` event created by the browser after that. In some cases, the non-synthetic `click` event created by the browser is required, as described in the [triggering focus example](http://ftlabs.github.com/fastclick/examples/focus.html).
-
-This is where the `needsclick` class comes in. Add the class to any element that requires a non-synthetic click.
-
-#### Use case 2: Twitter Bootstrap 2.2.2 dropdowns ####
-
-Another example of when to use the `needsclick` class is with dropdowns in Twitter Bootstrap 2.2.2. Bootstrap add its own `touchstart` listener for dropdowns, so you want to tell FastClick to ignore those. If you don't, touch devices will automatically close the dropdown as soon as it is clicked, because both FastClick and Bootstrap execute the synthetic click, one opens the dropdown, the second closes it immediately after.
+You need to set the width and height of this div, otherwise the plot
+library doesn't know how to scale the graph. You can do it inline like
+this:
 
 ```html
-<a class="dropdown-toggle needsclick" data-toggle="dropdown">Dropdown</a>
+<div id="placeholder" style="width:600px;height:300px"></div>
 ```
 
-## Examples ##
+You can also do it with an external stylesheet. Make sure that the
+placeholder isn't within something with a display:none CSS property -
+in that case, Flot has trouble measuring label dimensions which
+results in garbled looks and might have trouble measuring the
+placeholder dimensions which is fatal (it'll throw an exception).
 
-FastClick is designed to cope with many different browser oddities. Here are some examples to illustrate this:
+Then when the div is ready in the DOM, which is usually on document
+ready, run the plot function:
 
-* [basic use](http://ftlabs.github.com/fastclick/examples/layer.html) showing the increase in perceived responsiveness
-* [triggering focus](http://ftlabs.github.com/fastclick/examples/focus.html) on an input element from a `click` handler
-* [input element](http://ftlabs.github.com/fastclick/examples/input.html) which never receives clicks but gets fast focus
+```js
+$.plot($("#placeholder"), data, options);
+```
 
-## Tests ##
+Here, data is an array of data series and options is an object with
+settings if you want to customize the plot. Take a look at the
+examples for some ideas of what to put in or look at the 
+[API reference](API.md). Here's a quick example that'll draw a line 
+from (0, 0) to (1, 1):
 
-There are no automated tests. The files in `tests/` are manual reduced test cases. We've had a think about how best to test these cases, but they tend to be very browser/device specific and sometimes subjective which means it's not so trivial to test.
+```js
+$.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+```
 
-## Credits and collaboration ##
+The plot function immediately draws the chart and then returns a plot
+object with a couple of methods.
 
-FastClick is maintained by [Rowan Beentje](http://twitter.com/rowanbeentje), [Matthew Caruana Galizia](http://twitter.com/mcaruanagalizia) and [Matthew Andrews](http://twitter.com/andrewsmatt) at [FT Labs](http://labs.ft.com). All open source code released by FT Labs is licenced under the MIT licence. We welcome comments, feedback and suggestions.  Please feel free to raise an issue or pull request.
+
+## What's with the name? ##
+
+First: it's pronounced with a short o, like "plot". Not like "flawed".
+
+So "Flot" rhymes with "plot".
+
+And if you look up "flot" in a Danish-to-English dictionary, some of
+the words that come up are "good-looking", "attractive", "stylish",
+"smart", "impressive", "extravagant". One of the main goals with Flot
+is pretty looks.
+
+
+## Notes about the examples ##
+
+In order to have a useful, functional example of time-series plots using time
+zones, date.js from [timezone-js][timezone-js] (released under the Apache 2.0
+license) and the [Olson][olson] time zone database (released to the public
+domain) have been included in the examples directory.  They are used in
+examples/axes-time-zones/index.html.
+
+
+[excanvas]: http://code.google.com/p/explorercanvas/
+[flashcanvas]: http://code.google.com/p/flashcanvas/
+[timezone-js]: https://github.com/mde/timezone-js
+[olson]: http://ftp.iana.org/time-zones
