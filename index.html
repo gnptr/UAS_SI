@@ -2,61 +2,21 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Flot Examples: Basic Options</title>
-	<link href="../examples.css" rel="stylesheet" type="text/css">
-	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../../excanvas.min.js"></script><![endif]-->
-	<script language="javascript" type="text/javascript" src="../../jquery.js"></script>
-	<script language="javascript" type="text/javascript" src="../../jquery.flot.js"></script>
+	<title>Flot Examples</title>
+	<link href="examples.css" rel="stylesheet" type="text/css">
+	<style>
+
+	h3 {
+		margin-top: 30px;
+		margin-bottom: 5px;
+	}
+
+	</style>
+	<script language="javascript" type="text/javascript" src="../jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="../jquery.flot.js"></script>
 	<script type="text/javascript">
 
-	$(function () {
-
-		var d1 = [];
-		for (var i = 0; i < Math.PI * 2; i += 0.25) {
-			d1.push([i, Math.sin(i)]);
-		}
-
-		var d2 = [];
-		for (var i = 0; i < Math.PI * 2; i += 0.25) {
-			d2.push([i, Math.cos(i)]);
-		}
-
-		var d3 = [];
-		for (var i = 0; i < Math.PI * 2; i += 0.1) {
-			d3.push([i, Math.tan(i)]);
-		}
-
-		$.plot("#placeholder", [
-			{ label: "sin(x)", data: d1 },
-			{ label: "cos(x)", data: d2 },
-			{ label: "tan(x)", data: d3 }
-		], {
-			series: {
-				lines: { show: true },
-				points: { show: true }
-			},
-			xaxis: {
-				ticks: [
-					0, [ Math.PI/2, "\u03c0/2" ], [ Math.PI, "\u03c0" ],
-					[ Math.PI * 3/2, "3\u03c0/2" ], [ Math.PI * 2, "2\u03c0" ]
-				]
-			},
-			yaxis: {
-				ticks: 10,
-				min: -2,
-				max: 2,
-				tickDecimals: 3
-			},
-			grid: {
-				backgroundColor: { colors: [ "#fff", "#eee" ] },
-				borderWidth: {
-					top: 1,
-					right: 1,
-					bottom: 2,
-					left: 2
-				}
-			}
-		});
+	$(function() {
 
 		// Add the Flot version string to the footer
 
@@ -68,23 +28,52 @@
 <body>
 
 	<div id="header">
-		<h2>Basic Options</h2>
+		<h2>Flot Examples</h2>
 	</div>
 
 	<div id="content">
 
-		<div class="demo-container">
-			<div id="placeholder" class="demo-placeholder"></div>
-		</div>
+		<p>Here are some examples for <a href="http://www.flotcharts.org">Flot</a>, the Javascript charting library for jQuery:</p>
 
-		<p>There are plenty of options you can set to control the precise looks of your plot. You can control the ticks on the axes, the legend, the graph type, etc.</p>
+		<h3>Basic Usage</h3>
 
-		<p>Flot goes to great lengths to provide sensible defaults so that you don't have to customize much for a good-looking result.</p>
+		<ul>
+			<li><a href="basic-usage/index.html">Basic example</a></li>
+			<li><a href="series-types/index.html">Different graph types</a> and <a href="categories/index.html">simple categories/textual data</a></li>
+			<li><a href="basic-options/index.html">Setting various options</a> and <a href="annotating/index.html">annotating a chart</a></li>
+			<li><a href="ajax/index.html">Updating graphs with AJAX</a> and <a href="realtime/index.html">real-time updates</a></li>
+		</ul>
+
+		<h3>Interactivity</h3>
+
+		<ul>
+			<li><a href="series-toggle/index.html">Turning series on/off</a></li>
+			<li><a href="selection/index.html">Rectangular selection support and zooming</a> and <a href="zooming/index.html">zooming with overview</a> (both with selection plugin)</li>
+			<li><a href="interacting/index.html">Interacting with the data points</a></li>
+			<li><a href="navigate/index.html">Panning and zooming</a> (with navigation plugin)</li>
+			<li><a href="resize/index.html">Automatically redraw when window is resized</a> (with resize plugin)</li>
+		</ul>
+
+		<h3>Additional Features</h3>
+
+		<ul>
+			<li><a href="symbols/index.html">Using other symbols than circles for points</a> (with symbol plugin)</li>
+			<li><a href="axes-time/index.html">Plotting time series</a>, <a href="visitors/index.html">visitors per day with zooming and weekends</a> (with selection plugin) and <a href="axes-time-zones/index.html">time zone support</a></li>
+			<li><a href="axes-multiple/index.html">Multiple axes</a> and <a href="axes-interacting/index.html">interacting with the axes</a></li>
+			<li><a href="threshold/index.html">Thresholding the data</a> (with threshold plugin)</li>
+			<li><a href="stacking/index.html">Stacked charts</a> (with stacking plugin)</li>
+			<li><a href="percentiles/index.html">Using filled areas to plot percentiles</a> (with fillbetween plugin)</li>
+			<li><a href="tracking/index.html">Tracking curves with crosshair</a> (with crosshair plugin)</li>
+			<li><a href="image/index.html">Plotting prerendered images</a> (with image plugin)</li>
+			<li><a href="series-errorbars/index.html">Plotting error bars</a> (with errorbars plugin)</li>
+			<li><a href="series-pie/index.html">Pie charts</a> (with pie plugin)</li>
+			<li><a href="canvas/index.html">Rendering text with canvas instead of HTML</a> (with canvas plugin)</li>
+		</ul>
 
 	</div>
 
 	<div id="footer">
-		Copyright &copy; 2007 - 2014 IOLA and Ole Laursen
+		Copyright &copy; 2007 - 2013 IOLA and Ole Laursen
 	</div>
 
 </body>
