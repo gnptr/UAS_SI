@@ -1,227 +1,150 @@
-<?php if(! defined('BASEPATH')) exit('No direct script acess allowed');?>
-<div class="content-wrapper">
-  <section class="content-header">
-    <h1>
-      <i class="fa fa-edit" style="color:green"> </i>  <?= $title_web;?>
-    </h1>
-    <ol class="breadcrumb">
-			<li><a href="<?php echo base_url('dashboard');?>"><i class="fa fa-dashboard"></i>&nbsp; Dashboard</a></li>
-			<li class="active"><i class="fa fa-edit"></i>&nbsp;  <?= $title_web;?></li>
-    </ol>
-  </section>
-  <section class="content">
-	<div class="row">
-	    <div class="col-md-12">
-	        <div class="box box-primary">
-                <div class="box-header with-border">
-                </div>
-			    <!-- /.box-header -->
-			    <div class="box-body">
+<?php
+error_reporting(0);
+    if(!empty($_GET['download'] == 'doc')){
+        header("Content-Type: application/vnd.ms-word");
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("content-disposition: attachment;filename=".date('d-m-Y')."_laporan_rekam_medis.doc");
+    }
+    if(!empty($_GET['download'] == 'xls')){
+        header("Content-Type: application/force-download");
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Expires: 0");
+        header("content-disposition: attachment;filename=".date('d-m-Y')."_laporan_rekam_medis.xls");
+    }
+?>
+<?php
+        $tgla = $user->tgl_bergabung;
+        $tglk = $user->tgl_lahir;
+        $bulan = array(
+            '01' => 'Januari',
+            '02' => 'Februari',
+            '03' => 'Maret',
+            '04' => 'April',
+            '05' => 'Mei',
+            '06' => 'Juni',
+            '07' => 'Juli',
+            '08' => 'Agustus',
+            '09' => 'September',
+            '10' => 'Oktober',
+            '11' => 'November',
+            '12' => 'Desember',
+        );
+    
+        $array1=explode("-",$tgla);
+        $tahun=$array1[0];
+        $bulan1=$array1[1];
+        $hari=$array1[2];
+        $bl1 = $bulan[$bulan1];
+		$tgl1 = $hari.' '.$bl1.' '.$tahun;
+		
+
+        $array2=explode("-",$tglk);
+        $tahun2=$array2[0];
+        $bulan2=$array2[1];
+        $hari2=$array2[2];
+        $bl2 = $bulan[$bulan2];
+        $tgl2 = $hari2.' '.$bl2.' '.$tahun2;
+?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="<?php echo base_url();?>assets_style/assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="<?php echo base_url();?>assets_style/assets/bower_components/font-awesome/css/font-awesome.min.css">
+		<title><?= $title_web;?></title>
+		<style>
+			body {
+				background: rgba(0,0,0,0.2);
+			}
+			page[size="A4"] {
+				background: white;
+				width: 21cm;
+				height: 29.7cm;
+				display: block;
+				margin: 0 auto;
+				margin-bottom: 0.5pc;
+				box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+				padding-left:2.54cm;
+				padding-right:2.54cm;
+				padding-top:1.54cm;
+				padding-bottom:1.54cm;
+			}
+			@media print {
+				body, page[size="A4"] {
+					margin: 0;
+					box-shadow: 0;
+				}
+			}
+		</style>
+	</head>
+	<body>
+        <div class="container">
+            <br/> 
+            <div class="pull-left">
+                Codekop - Preview HTML to DOC [ size paper A4 ]
+            </div>
+            <div class="pull-right"> 
+            <button type="button" class="btn btn-success btn-md" onclick="printDiv('printableArea')">
+                <i class="fa fa-print"> </i> Print File
+            </button>
+            </div>
+        </div>
+        <br/>
+        <div id="printableArea">
+            <page size="A4">
+				<div class="panel panel-default">
+					<div class="panel-body bg-primary">
+						<h4 class="text-center">KARTU ANGGOTA PERPUSTAKAAN</h4>
+						<br/>
 						<div class="row">
-							<div class="col-sm-5">
-								<table class="table table-striped">
-									<tr style="background:yellowgreen">
-										<td colspan="3">Data Transaksi</td>
-									</tr>
-									<tr>
-										<td>No Peminjaman</td>
-										<td>:</td>
-										<td>
-											<?= $pinjam->pinjam_id;?>
-										</td>
-									</tr>
-									<tr>
-										<td>Tgl Peminjaman</td>
-										<td>:</td>
-										<td>
-											<?= $pinjam->tgl_pinjam;?>
-										</td>
-									</tr>
-									<tr>
-										<td>Tgl pengembalian</td>
-										<td>:</td>
-										<td>
-											<?= $pinjam->tgl_balik;?>
-										</td>
-									</tr>
+							<div class="col-sm-8">
+								<table class="table table-stripped">
 									<tr>
 										<td>ID Anggota</td>
 										<td>:</td>
-										<td>
-											<?= $pinjam->anggota_id;?>
-										</td>
+										<td><?= $user->id_login;?></td>
 									</tr>
 									<tr>
-										<td>Biodata</td>
+										<td>Nama</td>
 										<td>:</td>
-										<td>
-											<?php
-											$user = $this->M_Admin->get_tableid_edit('tbl_login','anggota_id',$pinjam->anggota_id);
-											error_reporting(0);
-											if($user->nama != null)
-											{
-												echo '<table class="table table-striped">
-															<tr>
-																<td>Nama Anggota</td>
-																<td>:</td>
-																<td>'.$user->nama.'</td>
-															</tr>
-															<tr>
-																<td>Telepon</td>
-																<td>:</td>
-																<td>'.$user->telepon.'</td>
-															</tr>
-															<tr>
-																<td>E-mail</td>
-																<td>:</td>
-																<td>'.$user->email.'</td>
-															</tr>
-															<tr>
-																<td>Alamat</td>
-																<td>:</td>
-																<td>'.$user->alamat.'</td>
-															</tr>
-															<tr>
-																<td>Level</td>
-																<td>:</td>
-																<td>'.$user->level.'</td>
-															</tr>
-														</table>';
-											}else{
-												echo 'Anggota Tidak Ditemukan !';
-											}
-											?>
-										</td>
+										<td><?= $user->nama;?></td>
 									</tr>
 									<tr>
-										<td>Lama Peminjaman</td>
+										<td>TTL</td>
 										<td>:</td>
-										<td>
-											<?= $pinjam->lama_pinjam;?> Hari
-										</td>
+										<td><?= $user->tempat_lahir;?>, <?= $tgl2 ;?></td>
+									</tr>
+									<tr>
+										<td>Alamat</td>
+										<td>:</td>
+										<td><?= $user->alamat;?></td>
+									</tr>
+									<tr>
+										<td>Tgl Bergabung</td>
+										<td>:</td>
+										<td><?= $tgl1;?></td>
 									</tr>
 								</table>
 							</div>
-							<div class="col-sm-7">
-								<table class="table table-striped">
-									<tr style="background:yellowgreen">
-										<td colspan="3">Pinjam Buku</td>
-									</tr>
-									<tr>
-										<td>Status</td>
-										<td>:</td>
-										<td>
-											<?= $pinjam->status;?>
-										</td>
-									</tr>
-									<tr>
-										<td>Tgl Kembali</td>
-										<td>:</td>
-										<td>
-											<?php 
-												if($pinjam->tgl_kembali == '0')
-												{
-													echo '<p style="color:red;">belum dikembalikan</p>';
-												}else{
-													echo $pinjam->tgl_kembali;
-												}
-											
-											?>
-										</td>
-									</tr>
-									<tr>
-										<td>Denda</td>
-										<td>:</td>
-										<td>
-											
-											<?php 
-												$pinjam_id = $pinjam->pinjam_id;
-												$denda = $this->db->query("SELECT * FROM tbl_denda WHERE pinjam_id = '$pinjam_id'");
-												$total_denda = $denda->row();
-
-												if($pinjam->status == 'Di Kembalikan')
-												{
-													echo $this->M_Admin->rp($total_denda->denda);
-													
-												}else{
-													$jml = $this->db->query("SELECT * FROM tbl_pinjam WHERE pinjam_id = '$pinjam_id'")->num_rows();			
-													$date1 = date('Ymd');
-													$date2 = preg_replace('/[^0-9]/','',$pinjam->tgl_balik);
-													$diff = $date1 - $date2;
-													/*	$datetime1 = new DateTime($date1);
-														$datetime2 = new DateTime($date2);
-														$difference = $datetime1->diff($datetime2); */
-													// echo $difference->days;
-													if($diff > 0 )
-													{
-														echo $diff.' hari';
-														$dd = $this->M_Admin->get_tableid_edit('tbl_biaya_denda','stat','Aktif'); 
-														echo '<p style="color:red;font-size:18px;">'.$this->M_Admin->rp($jml*($dd->harga_denda*$diff)).' 
-														</p><small style="color:#333;">* Untuk '.$jml.' Buku</small>';
-													}else{
-														echo '<p style="color:green;text-align:center;">
-														Tidak Ada Denda</p>';
-													}
-												}
-											?>
-										</td>
-									</tr>
-									<tr>
-										<td>Kode Buku</td>
-										<td>:</td>
-										<td>
-										<?php
-											$pin = $this->M_Admin->get_tableid('tbl_pinjam','pinjam_id',$pinjam->pinjam_id);
-											$no =1;
-											foreach($pin as $isi)
-											{
-												$buku = $this->M_Admin->get_tableid_edit('tbl_buku','buku_id',$isi['buku_id']);
-												echo $no.'. '.$buku->buku_id.'<br/>';
-											$no++;}
-
-										?>
-										</td>
-									</tr>
-									<tr>
-										<td>Data Buku</td>
-										<td>:</td>
-										<td>
-											<table class="table table-striped">
-												<thead>
-													<tr>
-														<th>No</th>
-														<th>Title</th>
-														<th>Penerbit</th>
-														<th>Tahun</th>
-													</tr>
-												</thead>
-												<tbody>
-												<?php 
-													$no=1;
-													foreach($pin as $isi)
-													{
-														$buku = $this->M_Admin->get_tableid_edit('tbl_buku','buku_id',$isi['buku_id']);
-												?>
-													<tr>
-														<td><?= $no;?></td>
-														<td><?= $buku->title;?></td>
-														<td><?= $buku->penerbit;?></td>
-														<td><?= $buku->thn_buku;?></td>
-													</tr>
-												<?php $no++;}?>
-												</tbody>
-											</table>
-										</td>
-									</tr>
-								</table>
+							<div class="col-sm-4 text-center">
+								<center>
+									<img src="<?php echo base_url();?>assets_style/image/<?php echo $user->foto;?>" style="width:3cm;height:4cm;" class="img-responsive">
+								</center>
 							</div>
 						</div>
-                        <div class="pull-right">
-							<a href="<?= base_url('transaksi');?>" class="btn btn-danger btn-md">Kembali</a>
-						</div>
-		        </div>
-	        </div>
-	    </div>
-    </div>
-</section>
-</div>
+					</div>
+				</div>
+            </page>
+        </div>
+  </body>
+  <script>
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+  </script>
+</html>
